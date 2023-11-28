@@ -41,6 +41,9 @@ class FlutterNudeCheckerPlugin: FlutterPlugin, MethodChannel.MethodCallHandler {
           )
           print(response)
           result.success(response)
+
+          NSFWScanner.closeInterpreter()
+          
         } catch (e: Exception) {
           result.error("NSFW_ERROR", e.message, null)
         }

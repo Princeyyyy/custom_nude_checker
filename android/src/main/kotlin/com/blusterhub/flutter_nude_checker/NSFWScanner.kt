@@ -159,6 +159,21 @@ object NSFWScanner {
         throw NSFWException("Please call NSFWScanner.initialize(...) before scanning.")
     }
 
+    fun closeInterpreter() {
+        try {
+            if (::modelInterpreter.isInitialized) {
+                modelInterpreter.close()
+                logDebug("Interpreter closed successfully.")
+            } else {
+                logDebug("Interpreter is not initialized or already closed.")
+            }
+        } catch (e: Exception) {
+            logError("Error while closing the interpreter: ${e.message}")
+        } finally {
+            applicationContext = null
+        }
+    }
+
     fun scanBitmapForNSFWScore(bitmap: Bitmap, onResult: (NSFWScoreBean) -> Unit) {
         GlobalScope.launch(Dispatchers.IO) {
             val result = scanBitmapForNSFWScore(bitmap)
