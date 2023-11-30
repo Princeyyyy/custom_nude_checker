@@ -100,7 +100,7 @@ object NSFWScanner {
         return Interpreter.Options().apply {
             setNumThreads(numThreads)
             if (enableGpuAcceleration) {
-                addDelegate(GpuDelegate())
+                // addDelegate(GpuDelegate())
                 setAllowBufferHandleOutput(true)
                 setAllowFp16PrecisionForFp32(true)
             }
@@ -157,21 +157,6 @@ object NSFWScanner {
             }
         }
         throw NSFWException("Please call NSFWScanner.initialize(...) before scanning.")
-    }
-
-    fun closeInterpreter() {
-        try {
-            if (::modelInterpreter.isInitialized) {
-                modelInterpreter.close()
-                logDebug("Interpreter closed successfully.")
-            } else {
-                logDebug("Interpreter is not initialized or already closed.")
-            }
-        } catch (e: Exception) {
-            logError("Error while closing the interpreter: ${e.message}")
-        } finally {
-            applicationContext = null
-        }
     }
 
     fun scanBitmapForNSFWScore(bitmap: Bitmap, onResult: (NSFWScoreBean) -> Unit) {
