@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_nude_checker/flutter_nude_checker.dart';
@@ -7,21 +8,25 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       home: MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key});
+
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
@@ -37,33 +42,45 @@ class _MyHomePageState extends State<MyHomePage> {
       if (image != null) {
         final nsfwScore =
             await FlutterNudeChecker.getNSFWScore(image.path, modelPath);
-        print("NSFW Score: ${nsfwScore.nsfwScore}");
-        print("SFW Score: ${nsfwScore.sfwScore}");
-        print(
+        if (kDebugMode) {
+          print("NSFW Score: ${nsfwScore.nsfwScore}");
+        }
+        if (kDebugMode) {
+          print("SFW Score: ${nsfwScore.sfwScore}");
+        }
+        if (kDebugMode) {
+          print(
             "Time consuming to load data: ${nsfwScore.timeConsumingToLoadData}");
-        print(
+        }
+        if (kDebugMode) {
+          print(
             "Time consuming to scan data: ${nsfwScore.timeConsumingToScanData}");
+        }
         //if nsfwScore.nsfwScore > 0.5, the image is NSFW and show a warning to the user
         if (nsfwScore.nsfwScore > 0.5) {
           showDialog(
             context: context,
             builder: (context) => AlertDialog(
-              title: Text("Warning"),
-              content: Text("This image is NSFW"),
+              title: const Text("Warning"),
+              content: const Text("This image is NSFW"),
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(context),
-                  child: Text("OK"),
+                  child: const Text("OK"),
                 ),
               ],
             ),
           );
         }
       } else {
-        print("No image selected.");
+        if (kDebugMode) {
+          print("No image selected.");
+        }
       }
     } catch (e) {
-      print("Error: $e");
+      if (kDebugMode) {
+        print("Error: $e");
+      }
     }
   }
 
@@ -87,12 +104,12 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("NSFW Checker Example"),
+        title: const Text("NSFW Checker Example"),
       ),
       body: Center(
         child: ElevatedButton(
           onPressed: _getNSFWScore,
-          child: Text("Get NSFW Score"),
+          child: const Text("Get NSFW Score"),
         ),
       ),
     );
